@@ -1,0 +1,34 @@
+[gd_scene load_steps=8 format=3 uid="uid://230jodbl6gdx"]
+
+[ext_resource type="Script" path="res://Scripts/Camera2DControl.cs" id="1_vsqyf"]
+[ext_resource type="Texture2D" uid="uid://cv003626cb05g" path="res://Map/void_block_map.png" id="3_7ibas"]
+[ext_resource type="Texture2D" uid="uid://cpcxbp0wp75h0" path="res://Map/prototype_block_map.png" id="3_qr4tw"]
+[ext_resource type="Script" path="res://Scripts/TileMapController.cs" id="4_t6e4g"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h0hjc"]
+resource_name = "Void"
+texture = ExtResource("3_7ibas")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_26pkn"]
+resource_name = "Prototype"
+texture = ExtResource("3_qr4tw")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_gguaa"]
+tile_size = Vector2i(128, 128)
+sources/0 = SubResource("TileSetAtlasSource_h0hjc")
+sources/1 = SubResource("TileSetAtlasSource_26pkn")
+
+[node name="Game" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("1_vsqyf")
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_gguaa")
+rendering_quadrant_size = 128
+format = 2
+script = ExtResource("4_t6e4g")
