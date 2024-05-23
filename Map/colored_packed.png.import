@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cv003626cb05g"
-path="res://.godot/imported/void_block_map.png-06266c082a72cf434b6d5316f14ca77f.ctex"
+uid="uid://c1kcoj7mj1f8q"
+path="res://.godot/imported/colored_packed.png-efa45d3f1392b462b5a67c1e7c909827.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Map/void_block_map.png"
-dest_files=["res://.godot/imported/void_block_map.png-06266c082a72cf434b6d5316f14ca77f.ctex"]
+source_file="res://Map/colored_packed.png"
+dest_files=["res://.godot/imported/colored_packed.png-efa45d3f1392b462b5a67c1e7c909827.ctex"]
 
 [params]
 
@@ -31,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

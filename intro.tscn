@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://c23ypwf1nly5b"]
+
+[ext_resource type="VideoStream" path="res://startvideo.ogv" id="1_vk8oe"]
+[ext_resource type="Script" path="res://Scripts/Intro.cs" id="2_jxyob"]
+
+[node name="Intro" type="VideoStreamPlayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stream = ExtResource("1_vk8oe")
+autoplay = true
+expand = true
+script = ExtResource("2_jxyob")
+
+[connection signal="finished" from="." to="." method="_on_finished"]
