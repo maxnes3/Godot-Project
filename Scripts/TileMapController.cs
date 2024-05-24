@@ -17,11 +17,12 @@ namespace BlindedSoulsBuild.Scripts
 		private static int[,] matrixFieldMap; // The matrix of map index
 		private static int[,] matrixEventMap;
 		public static Vector2I tileSize { private set; get; }
-		private readonly int centerCount = 6; // Count of zone center\
+		private readonly int centerCount = 6; // Count of zone center
+		private bool mainBaseCreated;
 		private List<Vector2I> bases;
 		private int radius;
 
-		public static (int i, int j) removeCell = (-1, -1);
+		public static Queue<(int i, int j)> removeCells;
 
 		private readonly List<(int x, int y)> AtlasTiles = new List<(int x, int y)>
 		{
@@ -43,6 +44,10 @@ namespace BlindedSoulsBuild.Scripts
 		{
 			tileSize = TileSet.TileSize;
 
+			removeCells = new Queue<(int i, int j)>();
+
+			mainBaseCreated = false;
+
 			Worker = (PackedScene)ResourceLoader.Load("res://Prefabs//worker.tscn");
 			Warrior = (PackedScene)ResourceLoader.Load("res://Prefabs//warrior.tscn");
 
@@ -50,8 +55,6 @@ namespace BlindedSoulsBuild.Scripts
 			matrixFieldMap = GenerateFieldMapMatrix();
 
 			matrixEventMap = GenerateEventMapMatrix();
-
-			//WriteMatrixToFile(getEventMap(), "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\matrix.txt");
 
 			// Draw tiles on map
 			DrawTileCells(matrixFieldMap, 0);
@@ -249,7 +252,7 @@ namespace BlindedSoulsBuild.Scripts
 
 			foreach (Vector2I center in bases)
 			{
-				newMapMatrix[center.X, center.Y] = 3;
+				newMapMatrix[center.X, center.Y] = !mainBaseCreated ? 3 : 7;
 				int signX;
 				int signY;
 
@@ -262,12 +265,15 @@ namespace BlindedSoulsBuild.Scripts
 				(int x, int y) newBuilding = (center.X + rnd.Next(1, radius / 9) * signX,
 					center.Y + rnd.Next(2, radius / 9) * signY);
 
-				newMapMatrix[newBuilding.x, newBuilding.y] = 5;
+				newMapMatrix[newBuilding.x, newBuilding.y] = !mainBaseCreated ? 5 : 7;
 
-				Node2D newWorker = (Node2D)Worker.Instantiate();
-				newWorker.Position = new Vector2I(newBuilding.x * TileSet.TileSize.X + TileSet.TileSize.X / 2, 
-					(newBuilding.y + 1) * TileSet.TileSize.Y + TileSet.TileSize.Y / 2);
-				AddChild(newWorker);
+				if (!mainBaseCreated)
+				{
+					Node2D newWorker = (Node2D)Worker.Instantiate();
+					newWorker.Position = new Vector2I(newBuilding.x * TileSet.TileSize.X + TileSet.TileSize.X / 2,
+						(newBuilding.y + 1) * TileSet.TileSize.Y + TileSet.TileSize.Y / 2);
+					AddChild(newWorker);
+				}
 
 				do
 				{
@@ -277,12 +283,15 @@ namespace BlindedSoulsBuild.Scripts
 						center.Y + rnd.Next(2, radius / 9) * signY);
 				} while (signX == 0 || signY == 0 || newMapMatrix[newBuilding.x, newBuilding.y] == 5);
 
-				newMapMatrix[newBuilding.x, newBuilding.y] = 6;
+				newMapMatrix[newBuilding.x, newBuilding.y] = !mainBaseCreated ? 6 : 7;
 
-				Node2D newWarrior = (Node2D)Warrior.Instantiate();
-				newWarrior.Position = new Vector2I(newBuilding.x * TileSet.TileSize.X + TileSet.TileSize.X / 2,
-					(newBuilding.y + 1) * TileSet.TileSize.Y + TileSet.TileSize.Y / 2);
-				AddChild(newWarrior);
+				if (!mainBaseCreated)
+				{
+					Node2D newWarrior = (Node2D)Warrior.Instantiate();
+					newWarrior.Position = new Vector2I(newBuilding.x * TileSet.TileSize.X + TileSet.TileSize.X / 2,
+						(newBuilding.y + 1) * TileSet.TileSize.Y + TileSet.TileSize.Y / 2);
+					AddChild(newWarrior);
+				}
 
 				int a = (int)(radius * 0.5f);
 				int b = (int)(radius * 0.5f);
@@ -299,6 +308,8 @@ namespace BlindedSoulsBuild.Scripts
 						newMapMatrix[x, y] = 4;
 					}
 				}
+
+				mainBaseCreated = true;
 			}
 
 			return newMapMatrix;
@@ -344,7 +355,14 @@ namespace BlindedSoulsBuild.Scripts
 
 		public override void _Process(double delta)
 		{
-			
+			while (removeCells.Count > 0)
+			{
+				var removeCell = removeCells.Dequeue();
+				matrixEventMap[removeCell.i, removeCell.j] = 0;
+				var tile = LocalToMap(new Vector2I(removeCell.j * tileSize.X + tileSize.X / 2,
+					removeCell.i * tileSize.Y + tileSize.Y / 2));
+				EraseCell(1, tile);
+			}
 		}
 
 		public void WriteMatrixToFile(int[,] matrix, string filePath)

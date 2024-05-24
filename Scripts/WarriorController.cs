@@ -25,7 +25,7 @@ namespace BlindedSoulsBuild.Scripts
 			{
 				(int i, int j) currentTile = ((int)(Position.Y - TileMapController.tileSize.Y / 2) / TileMapController.tileSize.Y,
 					(int)(Position.X - TileMapController.tileSize.X / 2) / TileMapController.tileSize.X);
-				(int i, int j) target = TileMovement.FindTarget(TileMapController.getEventMap(), currentTile, 3, Casern);
+				(int i, int j) target = TileMovement.FindTarget(TileMapController.getEventMap(), currentTile, 7, Casern);
 				pathList = new Queue<(int, int)>(TileMovement.FindShortestPath(TileMapController.getFieldMap(), currentTile, target, new List<int> { 1 }));
 				ChangeStep();
 				onTheWay = true;
@@ -50,6 +50,7 @@ namespace BlindedSoulsBuild.Scripts
 				}
 				else
 				{
+					TileMapController.removeCells.Enqueue(pathList.Dequeue());
 					onTheWay = false;
 					return;
 				}
