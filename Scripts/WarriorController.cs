@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace BlindedSoulsBuild.Scripts
 {
@@ -24,7 +25,7 @@ namespace BlindedSoulsBuild.Scripts
 			{
 				(int i, int j) currentTile = ((int)(Position.Y - TileMapController.tileSize.Y / 2) / TileMapController.tileSize.Y,
 					(int)(Position.X - TileMapController.tileSize.X / 2) / TileMapController.tileSize.X);
-				(int i, int j) target = TileMovement.FindTarget(TileMapController.getEventMap(), currentTile, 6, Casern);
+				(int i, int j) target = TileMovement.FindTarget(TileMapController.getEventMap(), currentTile, 3, Casern);
 				pathList = new Queue<(int, int)>(TileMovement.FindShortestPath(TileMapController.getFieldMap(), currentTile, target, new List<int> { 1 }));
 				ChangeStep();
 				onTheWay = true;

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="BlindedSoulsBuild"
-run/main_scene="res://game.tscn"
+run/main_scene="res://intro.tscn"
 config/features=PackedStringArray("4.2", "C#", "Mobile")
 boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 1)
 config/icon="res://icon.svg"

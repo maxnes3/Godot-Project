@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
@@ -12,8 +13,10 @@ namespace BlindedSoulsBuild.Scripts
 {
 	public partial class TileMapController : TileMap
 	{
+        public delegate void MyEventHandler();
+        public static event MyEventHandler OnMyEvent;
 
-		private readonly int mapGridSize = 251; // The size of map (X * X), where X % 2 != 0
+        private readonly int mapGridSize = 251; // The size of map (X * X), where X % 2 != 0
 		private static int[,] matrixFieldMap; // The matrix of map index
 		private static int[,] matrixEventMap;
 		public static Vector2I tileSize { private set; get; }
@@ -30,6 +33,7 @@ namespace BlindedSoulsBuild.Scripts
 			(1, 1), //Tree - 4
 			(19, 10), //Sawmill - 5
 			(3, 20), //Casern - 6
+			(1, 20) //EnemyBuilding - 7
 		};
 
 		PackedScene Worker;
@@ -38,30 +42,6 @@ namespace BlindedSoulsBuild.Scripts
 		// Action after spawn this object
 		public override void _Ready()
 		{
-			int[,] matrix = {
-				{ 1, 1, 0, 0 },
-				{ 1, 1, 1, 0 },
-				{ 0, 1, 0, 0 },
-				{ 1, 1, 1, 1 }
-			};
-
-			(int i, int j) start = (0, 0);
-			(int i, int j) end = (3, 3);
-			List<int> walkableIndex = new List<int> { 1 };
-
-			var path = TileMovement.FindShortestPath(matrix, start, end, walkableIndex);
-			if (path != null)
-			{
-				foreach (var pos in path)
-				{
-					GD.PrintErr($"({pos.Item1}, {pos.Item2})");
-				}
-			}
-			else
-			{
-				GD.PrintErr("No path found.");
-			}
-
 			tileSize = TileSet.TileSize;
 
 			Worker = (PackedScene)ResourceLoader.Load("res://Prefabs//worker.tscn");
@@ -70,12 +50,18 @@ namespace BlindedSoulsBuild.Scripts
 			// Generate map on matrix
 			matrixFieldMap = GenerateFieldMapMatrix();
 
-			matrixEventMap = GenerateEventMapMatrix();	
+			matrixEventMap = GenerateEventMapMatrix();
+
+			//WriteMatrixToFile(getEventMap(), "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\matrix.txt");
 
 			// Draw tiles on map
 			DrawTileCells(matrixFieldMap, 0);
 
+			matrixFieldMap = Transperent(matrixFieldMap);
+
 			DrawTileCells(matrixEventMap, 1, true);
+
+			matrixEventMap = Transperent(matrixEventMap);
 
 			// Change TileMap position 
 			Position -= new Vector2I(tileSize.X * (mapGridSize - 1) / 2 + tileSize.X / 2,
@@ -334,6 +320,19 @@ namespace BlindedSoulsBuild.Scripts
 			}
 		}
 
+		private int[,] Transperent(int[,] currentmatrix)
+		{
+			int[,] matrix = new int[currentmatrix.GetLength(0), currentmatrix.GetLength(1)];
+			for (int i = 0; i < currentmatrix.GetLength(0); ++i)
+			{
+				for (int j = 0; j < currentmatrix.GetLength(1); ++j)
+				{
+					matrix[j, i] = currentmatrix[i, j];
+				}
+			}
+			return matrix;
+		}
+
 		public static int[,] getFieldMap()
 		{
 			return matrixFieldMap;
@@ -343,5 +342,23 @@ namespace BlindedSoulsBuild.Scripts
 		{
 			return matrixEventMap;
 		}
-	}
+
+        public void WriteMatrixToFile(int[,] matrix, string filePath)
+		{
+			using (StreamWriter writer = new StreamWriter(filePath))
+			{
+				int rows = matrix.GetLength(0);
+				int cols = matrix.GetLength(1);
+
+				for (int i = 0; i < rows; i++)
+				{
+					for (int j = 0; j < cols; j++)
+					{
+						writer.Write(matrix[i, j]);
+					}
+					writer.WriteLine();
+				}
+			}
+		}
+    }
 }

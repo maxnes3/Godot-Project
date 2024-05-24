@@ -58,16 +58,17 @@ namespace BlindedSoulsBuild.Scripts
 			{
 				for (int j = 0; j < matrix.GetLength(1); ++j)
 				{
-					if (matrix[i, j].Equals(targetIndex) && 
-						Math.Abs(current.i + current.j - i - j) < minDistance &&
-						!(ignoreCell == (i, j)))
+					if (matrix[i, j] == targetIndex && !(ignoreCell == (i, j)))
 					{
-						target = (i, j);
-						minDistance = i + j;
+						int distance = Math.Abs(current.i - i) + Math.Abs(current.j - j);
+						if (distance < minDistance)
+						{
+							target = (i, j);
+							minDistance = distance;
+						}
 					}
 				}
 			}
-
 			return target;
 		}
 	}

@@ -3,7 +3,11 @@
   "WorkspaceRootPath": "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{441DB609-C4F7-4C97-8EE4-F4D70B376506}|BlindedSoulsBuild.csproj|E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\scripts\\warriorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{441DB609-C4F7-4C97-8EE4-F4D70B376506}|BlindedSoulsBuild.csproj|e:\\study\\computergraphics\\computergraphics\\blindedsouls\\project\\scripts\\workercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{441DB609-C4F7-4C97-8EE4-F4D70B376506}|BlindedSoulsBuild.csproj|solutionrelative:scripts\\workercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{441DB609-C4F7-4C97-8EE4-F4D70B376506}|BlindedSoulsBuild.csproj|e:\\study\\computergraphics\\computergraphics\\blindedsouls\\project\\scripts\\warriorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{441DB609-C4F7-4C97-8EE4-F4D70B376506}|BlindedSoulsBuild.csproj|solutionrelative:scripts\\warriorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -11,8 +15,12 @@
       "RelativeMoniker": "D:0:0:{441DB609-C4F7-4C97-8EE4-F4D70B376506}|BlindedSoulsBuild.csproj|solutionrelative:scripts\\tilemovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{441DB609-C4F7-4C97-8EE4-F4D70B376506}|BlindedSoulsBuild.csproj|e:\\study\\computergraphics\\computergraphics\\blindedsouls\\project\\scripts\\tilemapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{441DB609-C4F7-4C97-8EE4-F4D70B376506}|BlindedSoulsBuild.csproj|E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\scripts\\tilemapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{441DB609-C4F7-4C97-8EE4-F4D70B376506}|BlindedSoulsBuild.csproj|solutionrelative:scripts\\tilemapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{441DB609-C4F7-4C97-8EE4-F4D70B376506}|BlindedSoulsBuild.csproj|e:\\study\\computergraphics\\computergraphics\\blindedsouls\\project\\scripts\\camera2dcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{441DB609-C4F7-4C97-8EE4-F4D70B376506}|BlindedSoulsBuild.csproj|solutionrelative:scripts\\camera2dcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,43 +30,69 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Camera2DControl.cs",
+              "DocumentMoniker": "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\Scripts\\Camera2DControl.cs",
+              "RelativeDocumentMoniker": "Scripts\\Camera2DControl.cs",
+              "ToolTip": "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\Scripts\\Camera2DControl.cs",
+              "RelativeToolTip": "Scripts\\Camera2DControl.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-24T21:18:19.088Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "WorkerController.cs",
+              "DocumentMoniker": "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\Scripts\\WorkerController.cs",
+              "RelativeDocumentMoniker": "Scripts\\WorkerController.cs",
+              "ToolTip": "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\Scripts\\WorkerController.cs",
+              "RelativeToolTip": "Scripts\\WorkerController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADQAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-24T20:26:09.664Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "WarriorController.cs",
               "DocumentMoniker": "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\Scripts\\WarriorController.cs",
               "RelativeDocumentMoniker": "Scripts\\WarriorController.cs",
               "ToolTip": "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\Scripts\\WarriorController.cs",
               "RelativeToolTip": "Scripts\\WarriorController.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAQwDcAAAAtAAAA",
+              "ViewState": "AQIAABcAAAAAAAAAAAAAABAAAAAUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-24T13:00:37.695Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "TileMovement.cs",
               "DocumentMoniker": "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\Scripts\\TileMovement.cs",
               "RelativeDocumentMoniker": "Scripts\\TileMovement.cs",
               "ToolTip": "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\Scripts\\TileMovement.cs",
               "RelativeToolTip": "Scripts\\TileMovement.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACgAAAA+AAAA",
+              "ViewState": "AQIAABAAAAAAAAAAAAAgwDMAAAB7AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-21T13:40:12.414Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "TileMapController.cs",
               "DocumentMoniker": "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\Scripts\\TileMapController.cs",
               "RelativeDocumentMoniker": "Scripts\\TileMapController.cs",
               "ToolTip": "E:\\Study\\ComputerGraphics\\ComputerGraphics\\BlindedSouls\\Project\\Scripts\\TileMapController.cs",
               "RelativeToolTip": "Scripts\\TileMapController.cs",
-              "ViewState": "AQIAABkBAAAAAAAAAAAIwBsAAAAUAAAA",
+              "ViewState": "AQIAAEIBAAAAAAAAAAAAAFcBAAADAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-20T12:01:41.664Z",
               "EditorCaption": ""
