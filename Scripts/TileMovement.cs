@@ -8,7 +8,7 @@ namespace BlindedSoulsBuild.Scripts
 {
 	public static class TileMovement
 	{
-		public static List<(int, int)> FindShortestPath(int[,] matrix, (int i, int j) start, (int i, int j) end, List<int> ignoreIndex)
+		public static List<(int, int)> FindShortestPath(int[,] matrix, (int i, int j) start, (int i, int j) end, List<int> walkableIndex)
 		{
 			int rows = matrix.GetLength(0);
 			int cols = matrix.GetLength(1);
@@ -38,7 +38,7 @@ namespace BlindedSoulsBuild.Scripts
 				{
 					(int i, int j) next = (current.i + direction.Item1, current.j + direction.Item2);
 					if (next.i >= 0 && next.i < rows && next.j >= 0 && next.j < cols &&
-						!visited.Contains(next) && !ignoreIndex.Contains(matrix[next.i, next.j]))
+						!visited.Contains(next) && walkableIndex.Contains(matrix[next.i, next.j]))
 					{
 						var newPath = new List<(int, int)>(path) { next };
 						queue.Enqueue(newPath);
@@ -47,6 +47,28 @@ namespace BlindedSoulsBuild.Scripts
 				}
 			}
 			return null;
+		}
+
+		public static (int i, int j) FindTarget(int[,] matrix, (int i, int j) current, int targetIndex, (int i, int j) ignoreCell)
+		{
+			int minDistance = int.MaxValue;
+			(int i, int j) target = (-1, -1);
+
+			for (int i = 0; i < matrix.GetLength(0); ++i)
+			{
+				for (int j = 0; j < matrix.GetLength(1); ++j)
+				{
+					if (matrix[i, j].Equals(targetIndex) && 
+						Math.Abs(current.i + current.j - i - j) < minDistance &&
+						!(ignoreCell == (i, j)))
+					{
+						target = (i, j);
+						minDistance = i + j;
+					}
+				}
+			}
+
+			return target;
 		}
 	}
 }

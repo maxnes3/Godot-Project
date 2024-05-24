@@ -8,7 +8,6 @@ namespace BlindedSoulsBuild.Scripts
 {
 	public interface IAIModel : IId
 	{
-		int Heath {  get; set; }
 
 	}
 }

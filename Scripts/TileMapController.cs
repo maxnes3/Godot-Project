@@ -25,20 +25,48 @@ namespace BlindedSoulsBuild.Scripts
 		{
 			(0, 0), //Void - 0
 			(2, 0), //Field - 1
-			(6, 19), //Base - 2
-			(1, 1), //Tree - 3
-			(19, 10) //Sawmill - 4
+			(5, 0), //Barrier - 2
+			(6, 19), //Base - 3
+			(1, 1), //Tree - 4
+			(19, 10), //Sawmill - 5
+			(3, 20), //Casern - 6
 		};
 
 		PackedScene Worker;
+		PackedScene Warrior;
 
 		// Action after spawn this object
 		public override void _Ready()
 		{
+			int[,] matrix = {
+				{ 1, 1, 0, 0 },
+				{ 1, 1, 1, 0 },
+				{ 0, 1, 0, 0 },
+				{ 1, 1, 1, 1 }
+			};
+
+			(int i, int j) start = (0, 0);
+			(int i, int j) end = (3, 3);
+			List<int> walkableIndex = new List<int> { 1 };
+
+			var path = TileMovement.FindShortestPath(matrix, start, end, walkableIndex);
+			if (path != null)
+			{
+				foreach (var pos in path)
+				{
+					GD.PrintErr($"({pos.Item1}, {pos.Item2})");
+				}
+			}
+			else
+			{
+				GD.PrintErr("No path found.");
+			}
+
 			tileSize = TileSet.TileSize;
 
 			Worker = (PackedScene)ResourceLoader.Load("res://Prefabs//worker.tscn");
-			
+			Warrior = (PackedScene)ResourceLoader.Load("res://Prefabs//warrior.tscn");
+
 			// Generate map on matrix
 			matrixFieldMap = GenerateFieldMapMatrix();
 
@@ -77,9 +105,9 @@ namespace BlindedSoulsBuild.Scripts
 				new Vector2I(mapGridSize - borderOffest, mapGridSize / 2) // Middle-right edge
 			};
 
-			List<int> ignoreIndex = new List<int>
+			List<int> walkableIndex = new List<int>
 			{
-				2
+				0, 1
 			};
 
 			// Function to place a base
@@ -128,13 +156,13 @@ namespace BlindedSoulsBuild.Scripts
 
 				foreach (Vector2I baseCenter in baseCenters)
 				{
-					for (int dx = -1; dx <= 1; ++dx)
+					for (int di = -1; di <= 1; ++di)
 					{
-						for (int dy = -1; dy <= 1; ++dy)
+						for (int dj = -1; dj <= 1; ++dj)
 						{
-							int x = baseCenter.X + dx;
-							int y = baseCenter.Y + dy;
-							barrierMap[x, y] = 0;
+							int i = baseCenter.X + di;
+							int j = baseCenter.Y + dj;
+							barrierMap[i, j] = 0;
 						}
 					}
 				}
@@ -191,7 +219,7 @@ namespace BlindedSoulsBuild.Scripts
 			// Function to create a path between two points
 			bool CreateBFSPath(Vector2I start, Vector2I end)
 			{
-				List<(int, int)> shortestlPath = TileMovement.FindShortestPath(barrierMap, (start.X, start.Y), (end.X, end.Y), ignoreIndex);
+				List<(int, int)> shortestlPath = TileMovement.FindShortestPath(barrierMap, (start.X, start.Y), (end.X, end.Y), walkableIndex);
 				if (shortestlPath != null)
 				{
 					foreach (var cell in shortestlPath)
@@ -208,6 +236,14 @@ namespace BlindedSoulsBuild.Scripts
 			{
 				GenerateRandomBarrierMap(mapGridSize * mapGridSize * barriersPercent / 100);
 			} while (!CreateBasePaths());
+
+			for(int i = 0; i < barrierMap.GetLength(0); ++i)
+			{
+				for(int j = 0; j < barrierMap.GetLength(1); ++j)
+				{
+					newMatrixMap[i, j] = barrierMap[i, j] != 0 ? barrierMap[i, j] : newMatrixMap[i, j];
+				}
+			}
 
 			// Place all bases on the map
 			foreach (Vector2I baseCenter in baseCenters)
@@ -228,7 +264,7 @@ namespace BlindedSoulsBuild.Scripts
 
 			foreach (Vector2I center in bases)
 			{
-				newMapMatrix[center.X, center.Y] = 2;
+				newMapMatrix[center.X, center.Y] = 3;
 				int signX;
 				int signY;
 
@@ -238,15 +274,30 @@ namespace BlindedSoulsBuild.Scripts
 					signY = rnd.Next(-1, 2);
 				} while(signX == 0 || signY == 0);
 
-				(int x, int y) newSawmill = (center.X + rnd.Next(1, radius / 9) * signX,
+				(int x, int y) newBuilding = (center.X + rnd.Next(1, radius / 9) * signX,
 					center.Y + rnd.Next(2, radius / 9) * signY);
 
-				newMapMatrix[newSawmill.x, newSawmill.y] = 4;
+				newMapMatrix[newBuilding.x, newBuilding.y] = 5;
 
 				Node2D newWorker = (Node2D)Worker.Instantiate();
-				newWorker.Position = new Vector2I(newSawmill.x * TileSet.TileSize.X + TileSet.TileSize.X / 2, 
-					(newSawmill.y + 1) * TileSet.TileSize.Y + TileSet.TileSize.Y / 2);
+				newWorker.Position = new Vector2I(newBuilding.x * TileSet.TileSize.X + TileSet.TileSize.X / 2, 
+					(newBuilding.y + 1) * TileSet.TileSize.Y + TileSet.TileSize.Y / 2);
 				AddChild(newWorker);
+
+				do
+				{
+					signX = rnd.Next(-1, 2);
+					signY = rnd.Next(-1, 2);
+					newBuilding = (center.X + rnd.Next(1, radius / 9) * signX,
+						center.Y + rnd.Next(2, radius / 9) * signY);
+				} while (signX == 0 || signY == 0 || newMapMatrix[newBuilding.x, newBuilding.y] == 5);
+
+				newMapMatrix[newBuilding.x, newBuilding.y] = 6;
+
+				Node2D newWarrior = (Node2D)Warrior.Instantiate();
+				newWarrior.Position = new Vector2I(newBuilding.x * TileSet.TileSize.X + TileSet.TileSize.X / 2,
+					(newBuilding.y + 1) * TileSet.TileSize.Y + TileSet.TileSize.Y / 2);
+				AddChild(newWarrior);
 
 				int a = (int)(radius * 0.5f);
 				int b = (int)(radius * 0.5f);
@@ -260,7 +311,7 @@ namespace BlindedSoulsBuild.Scripts
 
 					if (x >= 0 && x < mapGridSize && y >= 0 && y < mapGridSize)
 					{
-						newMapMatrix[x, y] = 3;
+						newMapMatrix[x, y] = 4;
 					}
 				}
 			}
@@ -281,11 +332,6 @@ namespace BlindedSoulsBuild.Scripts
 					SetCell(layer, new Vector2I(i, j), 0, new Vector2I(currentAtlasTile.x, currentAtlasTile.y), 0);
 				}
 			}
-		}
-
-		public static void RemoveEventTileCell((int i, int j) cell)
-		{
-			matrixEventMap[cell.i, cell.j] = 0;
 		}
 
 		public static int[,] getFieldMap()

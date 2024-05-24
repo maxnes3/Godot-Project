@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://oxrhrbusinyd"]
+
+[ext_resource type="Script" path="res://Scripts/WarriorController.cs" id="1_5ox2q"]
+[ext_resource type="Texture2D" uid="uid://c1kcoj7mj1f8q" path="res://Map/colored_packed.png" id="2_md6kc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xseje"]
+atlas = ExtResource("2_md6kc")
+region = Rect2(448, 0, 16, 16)
+
+[node name="Warrior" type="Node2D"]
+script = ExtResource("1_5ox2q")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_xseje")
