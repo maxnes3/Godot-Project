@@ -13,16 +13,15 @@ namespace BlindedSoulsBuild.Scripts
 {
 	public partial class TileMapController : TileMap
 	{
-        public delegate void MyEventHandler();
-        public static event MyEventHandler OnMyEvent;
-
-        private readonly int mapGridSize = 251; // The size of map (X * X), where X % 2 != 0
+		private readonly int mapGridSize = 251; // The size of map (X * X), where X % 2 != 0
 		private static int[,] matrixFieldMap; // The matrix of map index
 		private static int[,] matrixEventMap;
 		public static Vector2I tileSize { private set; get; }
 		private readonly int centerCount = 6; // Count of zone center\
 		private List<Vector2I> bases;
 		private int radius;
+
+		public static (int i, int j) removeCell = (-1, -1);
 
 		private readonly List<(int x, int y)> AtlasTiles = new List<(int x, int y)>
 		{
@@ -343,7 +342,12 @@ namespace BlindedSoulsBuild.Scripts
 			return matrixEventMap;
 		}
 
-        public void WriteMatrixToFile(int[,] matrix, string filePath)
+		public override void _Process(double delta)
+		{
+			
+		}
+
+		public void WriteMatrixToFile(int[,] matrix, string filePath)
 		{
 			using (StreamWriter writer = new StreamWriter(filePath))
 			{
@@ -360,5 +364,5 @@ namespace BlindedSoulsBuild.Scripts
 				}
 			}
 		}
-    }
+	}
 }

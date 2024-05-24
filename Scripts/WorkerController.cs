@@ -30,6 +30,7 @@ namespace BlindedSoulsBuild.Scripts
 				pathList = new Queue<(int, int)>(TileMovement.FindShortestPath(TileMapController.getFieldMap(), currentTile, target, new List<int> { 1 }));
 				ChangeStep();
 				full = !full;
+				//TO DO
 			}
 			MoveToTile();
 		}
@@ -52,6 +53,7 @@ namespace BlindedSoulsBuild.Scripts
 				else
 				{
 					full = !full;
+					//TO DO
 					return;
 				}
 			}
