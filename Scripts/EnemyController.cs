@@ -1,11 +1,10 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace BlindedSoulsBuild.Scripts
 {
-	public partial class WarriorController : Node2D
+	public partial class EnemyController : Node2D
 	{
 		private Queue<(int, int)> pathList;
 		private Vector2I nextStep;
@@ -22,7 +21,7 @@ namespace BlindedSoulsBuild.Scripts
 			{
 				(int i, int j) currentTile = ((int)(Position.Y - TileMapController.tileSize.Y / 2) / TileMapController.tileSize.Y,
 					(int)(Position.X - TileMapController.tileSize.X / 2) / TileMapController.tileSize.X);
-				(int i, int j) target = TileMovement.FindTarget(TileMapController.getEventMap(), currentTile, 7, (-1, -1));
+				(int i, int j) target = TileMovement.FindTarget(TileMapController.getEventMap(), currentTile, 8, (-1, -1));
 				pathList = new Queue<(int, int)>(TileMovement.FindShortestPath(TileMapController.getFieldMap(), currentTile, target, new List<int> { 1 }));
 				ChangeStep();
 				onTheWay = true;

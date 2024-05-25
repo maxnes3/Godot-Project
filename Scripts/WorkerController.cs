@@ -7,7 +7,6 @@ namespace BlindedSoulsBuild.Scripts
 {
 	public partial class WorkerController : Node2D
 	{
-		private (int i, int j) sawmill;
 		private bool full;
 		private Queue<(int, int)> pathList;
 		private Vector2I nextStep;
@@ -16,8 +15,6 @@ namespace BlindedSoulsBuild.Scripts
 
 		public override void _Ready()
 		{
-			sawmill = ((int)Position.Y / TileMapController.tileSize.Y,
-				(int)(Position.X - TileMapController.tileSize.X / 2) / TileMapController.tileSize.X);
 			full = false;
 		}
 
@@ -28,10 +25,7 @@ namespace BlindedSoulsBuild.Scripts
 			{
 				if (full == false)
 				{
-					(int i, int j) currentTile = ((int)(Position.Y - TileMapController.tileSize.Y / 2) / TileMapController.tileSize.Y,
-						(int)(Position.X - TileMapController.tileSize.X / 2) / TileMapController.tileSize.X);
-					(int i, int j) target = TileMovement.FindTarget(TileMapController.getEventMap(), currentTile, 4, (-1, -1));
-					pathList = new Queue<(int, int)>(TileMovement.FindShortestPath(TileMapController.getFieldMap(), currentTile, target, new List<int> { 1 }));
+					MakeNewPath(4);
 					ChangeStep();
 					full = !full;
 					//TO DO
@@ -42,6 +36,14 @@ namespace BlindedSoulsBuild.Scripts
 			{
 				timeout--;
 			}
+		}
+
+		private void MakeNewPath(int targe)
+		{
+			(int i, int j) currentTile = ((int)(Position.Y - TileMapController.tileSize.Y / 2) / TileMapController.tileSize.Y,
+						(int)(Position.X - TileMapController.tileSize.X / 2) / TileMapController.tileSize.X);
+			(int i, int j) target = TileMovement.FindTarget(TileMapController.getEventMap(), currentTile, targe, (-1, -1));
+			pathList = new Queue<(int, int)>(TileMovement.FindShortestPath(TileMapController.getFieldMap(), currentTile, target, new List<int> { 1 }));
 		}
 
 		private void ChangeStep()
@@ -64,10 +66,8 @@ namespace BlindedSoulsBuild.Scripts
 					if (GoingOnBase == true)
 					{
 						timeout = 100;
-						(int i, int j) currentTile = ((int)(Position.Y - TileMapController.tileSize.Y / 2) / TileMapController.tileSize.Y,
-						(int)(Position.X - TileMapController.tileSize.X / 2) / TileMapController.tileSize.X);
-						(int i, int j) target = TileMovement.FindTarget(TileMapController.getEventMap(), currentTile, 4, (-1, -1));
-						pathList = new Queue<(int, int)>(TileMovement.FindShortestPath(TileMapController.getFieldMap(), currentTile, target, new List<int> { 1 }));
+						TileMapController.createNewHouse = true;
+						MakeNewPath(4);
 						GoingOnBase = false;
 						return;
 					}
@@ -76,10 +76,7 @@ namespace BlindedSoulsBuild.Scripts
 
 						timeout = 600;
 						TileMapController.removeCells.Enqueue(pathList.Dequeue());
-						(int i, int j) currentTile = ((int)(Position.Y - TileMapController.tileSize.Y / 2) / TileMapController.tileSize.Y,
-							(int)(Position.X - TileMapController.tileSize.X / 2) / TileMapController.tileSize.X);
-						(int i, int j) target = TileMovement.FindTarget(TileMapController.getEventMap(), currentTile, 5, (-1, -1));
-						pathList = new Queue<(int, int)>(TileMovement.FindShortestPath(TileMapController.getFieldMap(), currentTile, target, new List<int> { 1 }));
+						MakeNewPath(5);
 						GoingOnBase = true;
 						return;
 					}

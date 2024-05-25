@@ -36,11 +36,11 @@ namespace BlindedSoulsBuild.Scripts
 			{
 				switch (mouseButtonEvent.ButtonIndex)
 				{
-					case MouseButton.WheelUp:
+					case MouseButton.WheelDown:
 						Zoom = Zoom > MIN_ZOOM ? Zoom - ZOOM_SPEED : Zoom;
 						break;
 
-					case MouseButton.WheelDown:
+					case MouseButton.WheelUp:
 						Zoom = Zoom < MAX_ZOOM ? Zoom + ZOOM_SPEED : Zoom;
 						break;
 				}

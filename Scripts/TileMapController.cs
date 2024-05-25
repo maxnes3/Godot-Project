@@ -23,6 +23,9 @@ namespace BlindedSoulsBuild.Scripts
 		private int radius;
 
 		public static Queue<(int i, int j)> removeCells;
+		private int enemyCount;
+
+		public static bool createNewHouse;
 
 		private readonly List<(int x, int y)> AtlasTiles = new List<(int x, int y)>
 		{
@@ -33,11 +36,13 @@ namespace BlindedSoulsBuild.Scripts
 			(1, 1), //Tree - 4
 			(19, 10), //Sawmill - 5
 			(3, 20), //Casern - 6
-			(1, 20) //EnemyBuilding - 7
+			(1, 20), //EnemyBuilding - 7
+			(7, 20), //New Building - 8
 		};
 
 		PackedScene Worker;
 		PackedScene Warrior;
+		PackedScene Enemy;
 
 		// Action after spawn this object
 		public override void _Ready()
@@ -46,10 +51,15 @@ namespace BlindedSoulsBuild.Scripts
 
 			removeCells = new Queue<(int i, int j)>();
 
+			enemyCount = 0;
+
 			mainBaseCreated = false;
+
+			createNewHouse = false;
 
 			Worker = (PackedScene)ResourceLoader.Load("res://Prefabs//worker.tscn");
 			Warrior = (PackedScene)ResourceLoader.Load("res://Prefabs//warrior.tscn");
+			Enemy = (PackedScene)ResourceLoader.Load("res://Prefabs//enemy.tscn");
 
 			// Generate map on matrix
 			matrixFieldMap = GenerateFieldMapMatrix();
@@ -358,10 +368,64 @@ namespace BlindedSoulsBuild.Scripts
 			while (removeCells.Count > 0)
 			{
 				var removeCell = removeCells.Dequeue();
+
+				if (matrixEventMap[removeCell.i, removeCell.j].Equals(7))
+				{
+					--enemyCount;
+					Node2D newEnemy = (Node2D)Enemy.Instantiate();
+					newEnemy.Position = new Vector2I(removeCell.j * TileSet.TileSize.X + TileSet.TileSize.X / 2,
+						(removeCell.i + 1) * TileSet.TileSize.Y + TileSet.TileSize.Y / 2);
+					AddChild(newEnemy);
+				}
+
 				matrixEventMap[removeCell.i, removeCell.j] = 0;
 				var tile = LocalToMap(new Vector2I(removeCell.j * tileSize.X + tileSize.X / 2,
 					removeCell.i * tileSize.Y + tileSize.Y / 2));
 				EraseCell(1, tile);
+				
+				if (enemyCount.Equals(0))
+				{
+
+				}
+			}
+
+			if (createNewHouse)
+			{
+				Random rnd = new Random();
+				int signX;
+				int signY;
+
+				(int x, int y) newBuilding;
+
+				do
+				{
+					signX = rnd.Next(-1, 2);
+					signY = rnd.Next(-1, 2);
+					newBuilding = (bases[0].X + rnd.Next(1, radius / 5) * signX,
+						bases[0].Y + rnd.Next(2, radius / 5) * signY);
+				} while (signX == 0 || signY == 0 || matrixEventMap[newBuilding.x, newBuilding.y] != 0);
+				matrixEventMap[newBuilding.x, newBuilding.y] = 8;
+				var tile = LocalToMap(new Vector2I(newBuilding.y * tileSize.X + tileSize.X / 2,
+					newBuilding.x * tileSize.Y + tileSize.Y / 2));
+				SetCell(1, tile, 0, new Vector2I(AtlasTiles[8].x, AtlasTiles[8].y), 0);
+
+				switch (rnd.Next(10))
+				{
+					case 0:
+						Node2D newWorker = (Node2D)Worker.Instantiate();
+						newWorker.Position = new Vector2I(newBuilding.x * TileSet.TileSize.X + TileSet.TileSize.X / 2,
+							(newBuilding.y + 1) * TileSet.TileSize.Y + TileSet.TileSize.Y / 2);
+						AddChild(newWorker);
+						break;
+					default:
+						Node2D newWarrior = (Node2D)Warrior.Instantiate();
+						newWarrior.Position = new Vector2I(newBuilding.x * TileSet.TileSize.X + TileSet.TileSize.X / 2,
+							(newBuilding.y + 1) * TileSet.TileSize.Y + TileSet.TileSize.Y / 2);
+						AddChild(newWarrior);
+						break;
+				}
+
+				createNewHouse = false;
 			}
 		}
 
